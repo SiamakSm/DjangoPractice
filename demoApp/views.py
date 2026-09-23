@@ -18,3 +18,16 @@ def guess_my_age(request, age):
 
 def guess_my_info(request, name, age):
     return HttpResponse(f"Your name is {name} and you have {age} years old")
+
+
+def search(request):
+    keyword = request.GET.get('q', 'nothing')
+    page = request.GET.get('page', '1')
+    return HttpResponse(f"Searching for: '{keyword}' on page {page}")
+
+
+def profile(request):
+    name = request.GET.get('name', 'noOne')
+    age = request.GET.get('age', 'unknown')
+    return HttpResponse(f"My name is '{name}' and {age} years old")
+ 
