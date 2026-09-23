@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def hello_world(request):
@@ -31,3 +32,7 @@ def profile(request):
     age = request.GET.get('age', 'unknown')
     return HttpResponse(f"My name is '{name}' and {age} years old")
  
+
+def my_view(request):
+    context = {'name': 'Siamak', 'stack': ['Python', 'Django', 'FastAPI']}
+    return render(request, 'demoApp/index.html', context)

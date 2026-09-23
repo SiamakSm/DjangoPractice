@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My First Template</title>
+</head>
+<body>
+    <h1>Welcome {{ name }}!</h1>
+    <p>Here are your skills:</p>
+    <ul>
+        {% for technology in stack %}
+            <li>{{ technology }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
