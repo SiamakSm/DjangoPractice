@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import student 
-
+from django.views import View
 
 def hello_world(request):
     return HttpResponse("hello django")
@@ -56,4 +56,13 @@ def create_student(request):
         return HttpResponse("Student created successfully!")
     
     return render(request, 'demoApp/add_student.html') 
+
+
+
+class StudentListView(View):
+    def get(self, request):
+        return HttpResponse("Get request from StudentListView Class")
+
+    def post(self, request):
+        return HttpResponse("POST request handled by Class-Based View")
 

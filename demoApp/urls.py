@@ -11,6 +11,8 @@ urlpatterns = [
     path('profile/', views.profile),
     path('templateDemo/', views.my_view),
     path('students/', views.readAll),
-    path('students/create/', views.create_student)
+    path('students/create/', views.create_student),
+
+    path('student-cbv/', views.StudentListView.as_view())
 ]
  
