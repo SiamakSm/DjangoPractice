@@ -9,6 +9,7 @@ urlpatterns = [
     path('info/<str:name>/',views.say_my_name),
     path('search/', views.search),
     path('profile/', views.profile),
-    path('templateDemo/',views.my_view)
+    path('templateDemo/', views.my_view),
+    path('students/', views.readAll)
 ]
  

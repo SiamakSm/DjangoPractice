@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render
+from .models import student 
 
 
 def hello_world(request):
@@ -35,4 +36,11 @@ def profile(request):
 
 def my_view(request):
     context = {'name': 'Siamak', 'stack': ['Python', 'Django', 'FastAPI']}
-    return render(request, 'demoApp/index.html', context)
+    return render(request, 'demoApp/index.html', context) 
+
+
+def readAll(request):
+    all_students = student.objects.all()
+    context = {'students': all_students}
+    return render(request, 'demoApp/student_list.html', context) 
+
