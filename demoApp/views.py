@@ -44,3 +44,16 @@ def readAll(request):
     context = {'students': all_students}
     return render(request, 'demoApp/student_list.html', context) 
 
+
+def create_student(request):
+    if request.method == 'POST' :
+        name = request.POST.get('name')
+        age = request.POST.get('age')
+        email = request.POST.get('email')
+
+        student.objects.create(Name=name , age= age , email = email)
+
+        return HttpResponse("Student created successfully!")
+    
+    return render(request, 'demoApp/add_student.html') 
+

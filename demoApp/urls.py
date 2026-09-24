@@ -10,6 +10,7 @@ urlpatterns = [
     path('search/', views.search),
     path('profile/', views.profile),
     path('templateDemo/', views.my_view),
-    path('students/', views.readAll)
+    path('students/', views.readAll),
+    path('students/create/', views.create_student)
 ]
  
