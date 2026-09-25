@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'demoApp',
-    'turbinesApp'
+    'turbinesApp',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
