@@ -9,9 +9,16 @@ class TurbinSerializer(serializers.Serializer):
  
 
 class TurbineModelSerializer(serializers.ModelSerializer):
+    uppercase_name = serializers.SerializerMethodField()
+
     class Meta : 
         model = Turbine
         fields = '__all__' # or fields = ['name']
+
+    def get_uppercase_name(self,obj) :
+        return obj.name.upper()
+
+
 
 
 
@@ -28,4 +35,12 @@ class AlertModelSerializer(serializers.ModelSerializer):
         fields = ['id','message','created_at']
 
 
+
+
+class TurbineWithAlertsSerializer(serializers.ModelSerializer):
+    alert_set = AlertModelSerializer(many=True, read_only=True)
+
+    class Meta :
+        model = Turbine
+        fields = ['id','name','alert_set']
 
