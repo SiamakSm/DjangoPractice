@@ -131,7 +131,7 @@ csv = pl.read_csv("data/db_hexoskin_connected.csv")
 #print(csv[0, "source_name"])
 #print(csv.head(5))
 
-print(csv.select(["AtHomePatientId", "timestamp"]).head(5))
+#print(csv.select(["AtHomePatientId", "timestamp"]).head(5))
 
 
 
@@ -139,7 +139,7 @@ r = csv.with_columns([
     pl.col("timestamp").str.to_datetime(time_zone="UTC")
 ])
 
-print(r.select(["AtHomePatientId", "timestamp"]).head(5))
+#print(r.select(["AtHomePatientId", "timestamp"]).head(5))
 
 
 
@@ -149,7 +149,7 @@ r = csv.with_columns([
     (pl.col("cpap_use_simulated") - pl.col("cpap_use_baseline")).alias("cpap_diff")
 ])
 
-print(r.select(["cpap_use_simulated", "cpap_use_baseline", "cpap_diff"]).head(5))
+#print(r.select(["cpap_use_simulated", "cpap_use_baseline", "cpap_diff"]).head(5))
 
 
 
@@ -159,8 +159,44 @@ r = csv.with_columns([
     (pl.col("cpap_use_simulated") - pl.col("cpap_use_baseline")).alias("cpap_diff")
 ]).filter(pl.col("cpap_diff") > 0)
 
-print(r.select(["cpap_use_simulated", "cpap_use_baseline", "cpap_diff"]).head(5))
+#print(r.select(["cpap_use_simulated", "cpap_use_baseline", "cpap_diff"]).head(5))
 
 
 
 
+
+
+
+
+df_prices = pl.DataFrame({
+    "timestamp": ["2026-09-01 10:00:00", "2026-09-01 11:00:00"],
+    "price_eur_mwh": [50.0, 75.0]
+}).with_columns(pl.col("timestamp").str.to_datetime(time_zone="UTC"))
+
+print(df_prices)
+
+
+df_scada = pl.DataFrame({
+    "timestamp": ["2026-09-01 09:14:22", "2026-09-01 10:48:05", "2026-09-01 11:05:10", "2026-09-01 10:59:59", "2026-09-01 12:05:10"],
+    "power_mw": [2.1, 2.4, 3.0, 2.4, 3.0]
+}).with_columns(pl.col("timestamp").str.to_datetime(time_zone="UTC"))
+
+print(df_scada)
+
+
+
+df_merged = df_scada.sort("timestamp").join_asof(
+    df_prices,
+    on="timestamp",
+    strategy="backward"
+).with_columns(
+    (pl.col("power_mw") * pl.col("price_eur_mwh")).alias("instant_revenue")
+)
+
+print(df_merged)
+
+
+df_local = df_merged.with_columns([
+    pl.col("timestamp").dt.convert_time_zone("Europe/Paris").alias("local_time")
+])
+print(df_local.select(["timestamp", "local_time" , "instant_revenue"]).head(3))
