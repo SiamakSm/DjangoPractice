@@ -124,7 +124,42 @@ summary = df_fleet.group_by("farm").agg([
 
 
 
-print(summary)
+csv = pl.read_csv("data/db_hexoskin_connected.csv")
+
+#print(csv[0])
+#print(csv[0,3])
+#print(csv[0, "source_name"])
+#print(csv.head(5))
+
+print(csv.select(["AtHomePatientId", "timestamp"]).head(5))
+
+
+
+r = csv.with_columns([
+    pl.col("timestamp").str.to_datetime(time_zone="UTC")
+])
+
+print(r.select(["AtHomePatientId", "timestamp"]).head(5))
+
+
+
+
+r = csv.with_columns([
+    pl.col("timestamp").str.to_datetime(time_zone="UTC"),
+    (pl.col("cpap_use_simulated") - pl.col("cpap_use_baseline")).alias("cpap_diff")
+])
+
+print(r.select(["cpap_use_simulated", "cpap_use_baseline", "cpap_diff"]).head(5))
+
+
+
+
+r = csv.with_columns([
+    pl.col("timestamp").str.to_datetime(time_zone="UTC"),
+    (pl.col("cpap_use_simulated") - pl.col("cpap_use_baseline")).alias("cpap_diff")
+]).filter(pl.col("cpap_diff") > 0)
+
+print(r.select(["cpap_use_simulated", "cpap_use_baseline", "cpap_diff"]).head(5))
 
 
 
