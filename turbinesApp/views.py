@@ -5,6 +5,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from .serializers import TurbineModelSerializer
+
 
 # Create your views here.
 
@@ -21,17 +23,26 @@ class TurbineHealthView (APIView) :
 
 class TurbineCreateView(APIView):
     def post(self, request):
-        # 1. Read what the client sent
-        name = request.data.get("name")
-        capacity = request.data.get("capacity_mw")
-        # 2. Validate: did they send both fields?
-        if not name or not capacity:
-            return Response(
-                {"error": "name and capacity_mw are required"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        # 3. Return success
-        return Response(
-            {"message": f"Turbine '{name}' received!", "capacity_mw": capacity},
-            status=status.HTTP_201_CREATED
-        )
+
+        #name = request.data.get("name")
+        #capacity = request.data.get("capacity_mw")
+
+        #if not name or not capacity:
+        #    return Response(
+        #        {"error": "name and capacity_mw are required"},
+        #        status=status.HTTP_400_BAD_REQUEST
+        #    )
+
+        #return Response(
+        #    {"message": f"Turbine '{name}' received!", "capacity_mw": capacity},
+        #    status=status.HTTP_201_CREATED
+        #)
+
+        serializer = TurbineModelSerializer(data = request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
